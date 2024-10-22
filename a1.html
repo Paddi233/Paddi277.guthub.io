@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>抽奖</title>
+  <style>
+    table {
+      margin: auto;
+    }
+    td {
+      width: 100px;
+      height: 120px;
+      border: 1px solid #000;
+      cursor: pointer;
+      background-color: azure;
+      text-align: center;
+      vertical-align: middle;
+    }
+    img {
+      width: 100px;
+      height: 120px;
+    }
+    .hit, .miss {
+      background-color: white;
+    }
+    .hit::before {
+      content: "😃";
+      font-size: 24px;
+      display: block;
+    }
+    .miss::before {
+      content: "MISS";
+      font-size: 14px;
+      display: block;
+    }
+    #result {
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <table>
+    <tr>
+      <td id="g1" class="cell"></td>
+      <td id="g2" class="cell"></td>
+      <td id="g3" class="cell"></td>
+    </tr>
+    <tr>
+      <td id="g4" class="cell"></td>
+      <td id="g5" class="cell"></td>
+      <td id="g6" class="cell"></td>
+    </tr>
+    <tr>
+      <td id="g7" class="cell"></td>
+      <td id="g8" class="cell"></td>
+      <td id="g9" class="cell"></td>
+    </tr>
+  </table>
+  <p id="result"></p>
+
+  <script>
+    window.onload = function() {
+      const prize = Math.floor(Math.random() * 9) + 1;
+      const cells = document.querySelectorAll('.cell');
+      let times = 1;
+      let remaining = 9;
+
+      function updateResultText() {
+        const resultText = `第${times}次点击：`;
+        if (remaining === 0) {
+          document.getElementById('result').textContent = resultText + '恭喜中奖😃';
+        } else if (remaining === 8) {
+          document.getElementById('result').textContent = resultText + '未中奖☹️';
+        }
+      }
+
+      cells.forEach(cell => {
+        cell.addEventListener('click', function() {
+          if (remaining === 0) return;
+          const cellId = parseInt(this.id.replace('g', ''));
+          if (cellId === prize) {
+            this.classList.add('hit');
+            updateResultText();
+            remaining = 0;
+          } else {
+            this.classList.add('miss');
+            updateResultText();
+            remaining--;
+          }
+          times++;
+        });
+      });
+    };
+  </script>
+</body>
+
+</html>
